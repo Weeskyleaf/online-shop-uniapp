@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo" style="letter-spacing: 3px">电商管理平台</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    slwn
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                    <dd><a href="./src/html/login.html">退出登录</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item"><a href="javascript:void(0)" id="categoryButton">商品类别</a></li>
+                <li class="layui-nav-item"><a href="javascript:void(0)" id="detailButton">商品信息</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="category">
+        <div class="layui-body layui-col-md4 layui-col-md-offset1">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>类别管理</legend>
+            </fieldset>
+            <div style="margin-bottom: 2%">
+                <button type="button" class="layui-btn layui-btn-fluid" id="add">添加新类别</button>
+            </div>
+            <div style="margin-bottom: 2%">
+                <button type="button" class="layui-btn layui-btn-fluid" id="reload">刷新</button>
+            </div>
+            <div id="test1"></div>
+        </div>
+        <div class="layui-body layui-col-md4 layui-col-md-offset6">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>详细数据</legend>
+            </fieldset>
+            <div style="letter-spacing: 1px;font-size: 16px">
+                <div style="padding: 0 10px">
+                    <p style="padding: 10px 0">名称：
+                    <p/>
+                    <div class="layui-input-inline">
+                        <input type="text" id="type_name" class="layui-input">
+                    </div>
+                </div>
+                <div style="padding: 0 10px">
+                    <p style="padding: 10px 0">序号：
+                    <p/>
+                    <div class="layui-input-inline">
+                        <input type="text" id="id" class="layui-input">
+                    </div>
+                </div>
+                <div style="padding: 10px">
+                    <p style="padding: 10px 0">类别号：
+                    <p/>
+                    <div class="layui-input-inline">
+                        <input type="text" id="pid" class="layui-input">
+                    </div>
+                </div>
+                <div style="padding: 10px">
+                    <p style="padding: 10px 0">image：</p>
+                    <img alt="暂无图片" id="image">
+                    <button type="button" class="layui-btn layui-btn-radius"
+                            style="margin-left: 50px;width: 180px" id="addImage2">重新上传
+                    </button>
+                </div>
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-radius"
+                        style="margin-top: 30px;width: 180px" id="update">修改
+                </button>
+                <button type="button" class="layui-btn layui-btn-danger layui-btn-radius"
+                        style="margin-top: 30px;width: 180px" id="delete">删除
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="detail">
+        <div class="layui-body">
+            <table class="layui-hide" id="detailTable" lay-filter="detailTable" lay-data="{id: 'detailTable'}"></table>
+        </div>
+    </div>
+    <div class="layui-footer">© slwn.com - 底部固定区域</div>
+</div>
+<form id="addForm" style="display: none;">
+    <div class="layui-form-item form-item">
+        <label class="layui-form-label">新类名称</label>
+        <div class="layui-input-inline">
+            <input type="text" lay-verify="title" autocomplete="off" placeholder="请输入名称"
+                   class="layui-input" style="margin-right: 20px" id="name">
+        </div>
+    </div>
+    <div class="layui-upload form-item">
+        <button type="button" class="layui-btn" id="addImage">上传图片</button>
+    </div>
+    <div class="layui-upload-list form-item">
+        <img class="layui-upload-img" id="demo1">
+    </div>
+    <div class="layui-upload-list form-item">
+        <button type="button" class="layui-btn" id="submit">提交</button>
+    </div>
+</form>
+<form id="addGoodsForm" style="display: none;">
+    <div class="layui-form-item form-item">
+        <label class="layui-form-label">类别名称</label>
+        <div class="layui-input-inline">
+            <input type="text" lay-verify="title" autocomplete="off" placeholder="请输入类别名称"
+                   class="layui-input" style="margin-right: 20px" id="goodsTypeName">
+        </div>
+    </div>
+    <div class="layui-form-item form-item">
+        <label class="layui-form-label">品牌名称</label>
+        <div class="layui-input-inline">
+            <input type="text" lay-verify="title" autocomplete="off" placeholder="请输入名称"
+                   class="layui-input" style="margin-right: 20px" id="goodsName">
+        </div>
+    </div>
+    <div class="layui-form-item form-item">
+        <label class="layui-form-label">价格</label>
+        <div class="layui-input-inline">
+            <input type="text" lay-verify="title" autocomplete="off" placeholder="请输入价格"
+                   class="layui-input" style="margin-right: 20px" id="goodsPrice">
+        </div>
+    </div>
+    <div class="layui-form-item form-item">
+        <label class="layui-form-label">剩余数量</label>
+        <div class="layui-input-inline">
+            <input type="text" lay-verify="title" autocomplete="off" placeholder="请输入数量"
+                   class="layui-input" style="margin-right: 20px" id="goodsCount">
+        </div>
+    </div>
+    <div class="layui-upload-list form-item">
+        <button type="button" class="layui-btn" id="submitGoods">提交</button>
+    </div>
+</form>
+<script type="text/html" id="toolbarList">
+    <button class="layui-btn layui-btn-sm" lay-event="reload">刷新</button>
+    <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+</script>
+<script type="text/html" id="formList">
+    <a class="layui-btn layui-btn-xs" lay-event="update">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="https://cdn.bootcdn.net/ajax/libs/layui/2.5.7/layui.all.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/layer/3.1.1/layer.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.js"></script>
+<link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css">
+<script>
+    layui.use(['element', 'tree', 'jquery', 'layer', 'upload', 'table'], function () {
+        /**
+         * 模块化初始化和使用
+         */
+        const element = layui.element, tree = layui.tree, $ = layui.jquery, layer = layui.layer, upload = layui.upload,
+            table = layui.table, baseURL = 'http://zedomi.free.vipnps.vip';
+        var layerOpenIndex = 0, imageURL = '', pid = 0;
+
+        /**
+         * 初始化时加载所有商品数据
+         */
+        axios({
+            method: 'GET',
+            url: `${baseURL}/CommodityTypeController/select_all_type`,
+        }).then(value => {
+            // 处理数据
+            let data = value.data.data;
+            for (let firstStage of data) {
+                firstStage.title = firstStage.type_name;
+                firstStage.children = firstStage.group;
+                if (firstStage.children) for (let secondStage of firstStage.children) secondStage.title = secondStage.type_name;
+            }
+            tree.reload('tree1', {data});
+        }, reason => {
+            layer.msg('出错了！', {icon: 2, time: 1000});
+            console.log(reason);
+        });
+
+        /**
+         * 表格信息的渲染
+         */
+        table.render({
+            elem: '#detailTable',
+            page: true,
+            title: '商品详细信息总表',
+            even: true,
+            toolbar: '#toolbarList',
+            url: `${baseURL}/CommodityController/find_all`,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', title: '商品号', sort: true, unresize: true},
+                {field: 'type_name', title: '类别名称', sort: true, unresize: true, edit: 'text'},
+                {field: 'name', title: '品牌名称', unresize: true, edit: 'text'},
+                {field: 'price', title: '价格', sort: true, unresize: true, edit: 'text'},
+                {field: 'count', title: '剩余数量', sort: true, unresize: true, edit: 'text'},
+                {title: '数据操作', toolbar: '#formList'}
+            ]],
+            parseData: res => {
+                res.data.forEach((item, index) => {
+                    if (item.type_id === 90) item.type_name = 'A字裙';
+                    if (item.type_id === 105) item.type_name = '火锅'
+                })
+                return {
+                    "code": 0,
+                    "data": res.data,
+                    "count": res.data.length
+                }
+            }
+        });
+
+        /**
+         * 树形结构的渲染
+         */
+        tree.render({
+            elem: '#test1',
+            id: 'tree1',
+            edit: ['add', 'del'],
+            onlyIconControl: true,
+            // 监听节点被点击的回调
+            click: function (obj) {
+                let data = obj.data
+                $('#type_name').val(data.type_name);
+                $('#id').val(data.id);
+                $('#pid').val(data.pid);
+                $('#image').attr('src', data.image);
+            },
+            // 监听 添加/删除 操作
+            operate: function (obj) {
+                let type = obj.type;
+                let data = obj.data;
+                let elem = obj.elem;
+                let id = data.id;
+                if (type === 'add') {
+                    pid = data.id;
+                    layerOpenIndex = layer.open({
+                        type: 1,
+                        content: $('#addForm'),
+                        area: ['700px', '350px'],
+                        resize: false
+                    });
+                } else if (type === 'del') {
+                    axios({
+                        method: 'GET',
+                        url: `${baseURL}/CommodityTypeController/delete`,
+                        params: {id: data.id}
+                    }).then(
+                        value => {
+                            layer.msg('删除成功！', {icon: 1, time: 1000});
+                            $('#type_name').val('');
+                            $('#id').val('');
+                            $('#pid').val('');
+                            $('#image').removeAttr('src');
+                        },
+                        reason => {
+                            layer.msg('出错了！', {icon: 2, time: 1000});
+                            console.log(reason);
+                        }
+                    );
+                }
+            }
+        });
+
+        /**
+         * 表格的头部工具栏监听(即刷新/添加按钮的监听)
+         */
+        table.on('toolbar(detailTable)', obj => {
+            if (obj.event === 'reload') {
+                // 重新加载表格数据
+                table.reload('detailTable', {
+                    url: `${baseURL}/CommodityController/find_all`,
+                });
+            } else if (obj.event === 'add') {
+                layerOpenIndex = layer.open({
+                    type: 1,
+                    content: $('#addGoodsForm'),
+                    area: ['700px', '350px'],
+                    resize: false
+                });
+            }
+        });
+
+        /**
+         * 监听数据操作(即修改/删除操作)
+         */
+        table.on('tool(detailTable)', obj => {
+            console.log(obj);
+            if (obj.event === 'update') {
+                axios({
+                    method: 'GET',
+                    url: `${baseURL}/CommodityController/update`,
+                    params: {id: obj.data.id, name: obj.data.name, count: obj.data.count, price: obj.data.price, type_id: obj.data.type_id}
+                }).then(value => {
+                    layer.msg('修改成功！', {icon: 1, time: 1000});
+                    // 重新加载表格数据
+                    table.reload('detailTable', {
+                        url: `${baseURL}/CommodityController/find_all`,
+                    });
+                }, reason => {
+                    layer.msg('出错了！', {icon: 2, time: 1000});
+                    console.log(reason);
+                });
+            } else if (obj.event === 'del') {
+                axios({
+                    method: 'GET',
+                    url: `${baseURL}/CommodityController/delete`,
+                    params: {id: obj.data.id}
+                }).then(value => {
+                    layer.msg('删除成功！', {icon: 1, time: 1000});
+                    // 重新加载表格数据
+                    setTimeout(() => {
+                        table.reload('detailTable', {
+                            url: `${baseURL}/CommodityController/find_all`,
+                        });
+                    }, 1000);
+                }, reason => {
+                    layer.msg('出错了！', {icon: 2, time: 1000});
+                    console.log(reason);
+                });
+            }
+        });
+
+        /**
+         * 监听刷新按钮，点击时进行数据重载
+         */
+        $('#reload').on('click', () => {
+            axios({
+                method: 'GET',
+                url: `${baseURL}/CommodityTypeController/select_all_type`,
+            }).then(value => {
+                // 处理数据
+                let data = value.data.data;
+                for (let firstStage of data) {
+                    firstStage.title = firstStage.type_name;
+                    firstStage.children = firstStage.group;
+                    if (firstStage.children) for (let secondStage of firstStage.children) secondStage.title = secondStage.type_name;
+                }
+                tree.reload('tree1', {data});
+            }, reason => {
+                layer.msg('出错了！', {icon: 2, time: 1000});
+                console.log(reason);
+            });
+        });
+
+        /**
+         * 监听添加按钮，点击时弹出layer表单弹窗
+         */
+        $('#add').on('click', () => {
+            pid = 0;
+            layerOpenIndex = layer.open({
+                type: 1,
+                content: $('#addForm'),
+                area: ['700px', '350px'],
+                resize: false
+            });
+        });
+
+        /**
+         * 提交表单信息，添加一个新类别，传至服务器
+         */
+        $('#submit').on('click', () => {
+            if ($('#name').val() === '' || $('#demo1').attr('src') === undefined) {
+                layer.msg('请正确填写表单信息！', {icon: 2, time: 1000});
+                return false;
+            }
+            let name = $('#name').val();
+            axios({
+                method: 'GET',
+                url: `${baseURL}/CommodityTypeController/save`,
+                params: {
+                    pid,
+                    image: imageURL,
+                    type_name: name
+                }
+            }).then(value => {
+                $('#name').val('');
+                $('#demo1').removeAttr('src');
+                axios({
+                    method: 'GET',
+                    url: `${baseURL}/CommodityTypeController/select_all_type`,
+                }).then(value => {
+                    // 处理数据
+                    let data = value.data.data;
+                    for (let firstStage of data) {
+                        firstStage.title = firstStage.type_name;
+                        firstStage.children = firstStage.group;
+                        if (firstStage.children) for (let secondStage of firstStage.children) secondStage.title = secondStage.type_name;
+                    }
+                    tree.reload('tree1', {data});
+                }, reason => {
+                    layer.msg('出错了！', {icon: 2, time: 1000});
+                    console.log(reason);
+                });
+            }, reason => {
+                layer.msg('添加失败！', {icon: 2, time: 1000});
+                console.log(reason);
+            });
+            // 关闭弹窗
+            layer.close(layerOpenIndex);
+        });
+
+        /**
+         * 提交表单信息，添加一个商品详细信息，传至服务器
+         */
+        $('#submitGoods').on('click', () => {
+            if ($('#goodsTypeName').val() === '' || $('#goodsName').val() === '' || $('#goodsPrice').val() === '' || $('#goodsCount').val() === '') {
+                layer.msg('请正确填写表单信息！', {icon: 2, time: 1000});
+                return false;
+            }
+            let type_id;
+            if ($('#goodsTypeName').val() === 'A字裙') type_id = 90;
+            if ($('#goodsTypeName').val() === '火锅') type_id = 105;
+            let name = $('#goodsName').val();
+            let price = $('#goodsPrice').val();
+            let count = $('#goodsCount').val();
+            axios({
+                method: 'GET',
+                url: `${baseURL}/CommodityController/save`,
+                params: {
+                    type_id,
+                    name,
+                    price,
+                    count
+                }
+            }).then(value => {
+                $('#goodsTypeName').val('');
+                $('#goodsName').val('');
+                $('#goodsPrice').val('');
+                $('#goodsCount').val('');
+                // 重新加载表格数据
+                table.reload('detailTable', {
+                    url: `${baseURL}/CommodityController/find_all`,
+                });
+            }, reason => {
+                layer.msg('添加失败！', {icon: 2, time: 1000});
+                console.log(reason);
+            });
+            // 关闭弹窗
+            layer.close(layerOpenIndex);
+        });
+
+        /**
+         * 删除类别
+         */
+        $('#delete').on('click', () => {
+            axios({
+                method: 'GET',
+                url: `${baseURL}/CommodityTypeController/delete`,
+                params: {id: $('#id').val()}
+            }).then(
+                value => {
+                    if (value.data.code === 200) {
+                        layer.msg('删除成功！', {icon: 1, time: 1000});
+                        $('#type_name').val('');
+                        $('#id').val('');
+                        $('#pid').val('');
+                        $('#image').removeAttr('src');
+                    } else if (value.data.code === 1001) layer.msg('删除失败！', {icon: 2, time: 1000});
+                    /**
+                     * 再次重载数据
+                     */
+                    axios({
+                        method: 'GET',
+                        url: `${baseURL}/CommodityTypeController/select_all_type`,
+                    }).then(value => {
+                        // 处理数据
+                        let data = value.data.data;
+                        for (let firstStage of data) {
+                            firstStage.title = firstStage.type_name;
+                            firstStage.children = firstStage.group;
+                            if (firstStage.children) for (let secondStage of firstStage.children) secondStage.title = secondStage.type_name;
+                        }
+                        tree.reload('tree1', {data});
+                    }, reason => {
+                        layer.msg('出错了！', {icon: 2, time: 1000});
+                        console.log(reason);
+                    });
+                },
+                reason => {
+                    layer.msg('出错了！', {icon: 2, time: 1000});
+                    console.log(reason);
+                }
+            );
+        })
+
+        /**
+         * 修改类别
+         */
+        $('#update').on('click', () => {
+            axios({
+                method: 'GET',
+                url: `${baseURL}/CommodityTypeController/update`,
+                params: {
+                    type_name: $('#type_name').val(),
+                    id: $('#id').val(),
+                    pid: $('#pid').val(),
+                    image: imageURL
+                }
+            }).then(
+                value => {
+                    if (value.data.code === 200) layer.msg('修改成功！', {icon: 1, time: 1000});
+                    else if (value.data.code === 1001) layer.msg('修改失败！', {icon: 2, time: 1000});
+                    /**
+                     * 再次重载数据
+                     */
+                    axios({
+                        method: 'GET',
+                        url: `${baseURL}/CommodityTypeController/select_all_type`,
+                    }).then(value => {
+                        // 处理数据
+                        let data = value.data.data;
+                        for (let firstStage of data) {
+                            firstStage.title = firstStage.type_name;
+                            firstStage.children = firstStage.group;
+                            if (firstStage.children) for (let secondStage of firstStage.children) secondStage.title = secondStage.type_name;
+                        }
+                        tree.reload('tree1', {data});
+                    }, reason => {
+                        layer.msg('出错了！', {icon: 2, time: 1000});
+                        console.log(reason);
+                    });
+                },
+                reason => {
+                    layer.msg('出错了！', {icon: 2, time: 1000});
+                    console.log(reason);
+                }
+            );
+        });
+
+        /**
+         * 表单上传图片
+         */
+        upload.render({
+            elem: '#addImage',
+            url: 'http://zedomi.free.vipnps.vip/fileUpload',
+            before: obj => obj.preview((index, file, result) => $('#demo1').attr('src', result)), //图片链接（base64）
+            done: res => {
+                console.log(res);
+                if (res.code === 200) imageURL = res.data
+            }
+        });
+
+        /**
+         * 右侧上传图片
+         */
+        upload.render({
+            elem: '#addImage2',
+            url: 'http://zedomi.free.vipnps.vip/fileUpload',
+            before: obj => obj.preview((index, file, result) => $('#image').attr('src', result)), //图片链接（base64）
+            done: res => {
+                if (res.code === 200) imageURL = res.data
+            }
+        });
+
+        /**
+         * 点击商品类别
+         */
+        $('#categoryButton').on('click', () => {
+            $('#detail').hide();
+            $('#category').show();
+        });
+
+        /**
+         * 点击商品信息
+         */
+        $('#detailButton').on('click', () => {
+            $('#category').hide();
+            $('#detail').show();
+            // 重新加载表格数据
+            table.reload('detailTable', {
+                url: `${baseURL}/CommodityController/find_all`,
+            });
+        })
+
+        /**
+         * 隐藏商品详细信息表格
+         */
+        $('#detail').hide();
+    });
+</script>
+</body>
+</html>
+
+<style>
+    img {
+        border: 1px solid black;
+        width: 90px;
+        height: 90px;
+    }
+
+    .form-item {
+        justify-content: center;
+        display: flex;
+        margin-top: 15px;
+    }
+</style>

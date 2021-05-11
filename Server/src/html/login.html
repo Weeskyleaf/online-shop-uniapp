@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../css/layui.css">
+</head>
+<body>
+<div class="layui-row">
+    <div class="layui-col-md6 layui-col-md-offset3">
+        <div style="padding-top: 30%">
+            <div style="text-align: center;letter-spacing: 15px">
+                <h1>电商管理平台</h1>
+            </div>
+            <form id="login-form" onsubmit="return goIndex();" action="../../index.html">
+                <div class="layui-form-item" style="margin-top: 15px">
+                    <label class="layui-form-label" style="width: 50px">账号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入账号"
+                               class="layui-input" style="border-radius: 10px" id="name">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="width: 50px">密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="password" lay-verify="title" autocomplete="off" placeholder="请输入密码"
+                               class="layui-input" style="border-radius: 10px" id="password">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn layui-btn-fluid layui-btn-radius layui-btn-normal" id="login">登录</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.bootcdn.net/ajax/libs/layui/2.5.7/layui.all.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/layer/3.1.1/layer.js"></script>
+<script>
+    layui.use(['element', 'jquery', 'layer'], function () {
+        var element = layui.element, $ = layui.jquery, layer = layui.layer;
+        $('#login').click(function goIndex() {
+            if ($('#name').val() === 'admin' && $('#password').val() === 'admin') {
+                setTimeout(() => {
+                    layer.close(loadIndex);
+                }, 800);
+                let loadIndex = layer.load();
+                $('#password').val(Date.now());
+            } else {
+                layer.msg('账号密码有误！', {
+                    icon: 2,
+                    time: 1000
+                });
+                return false;
+            }
+        });
+    });
+</script>
+</body>
+</html>
+
+<style>
+    #login-form {
+        margin-top: 5%;
+        border: 1px solid #000000;
+        padding: 10px;
+        border-radius: 10px;
+    }
+</style>

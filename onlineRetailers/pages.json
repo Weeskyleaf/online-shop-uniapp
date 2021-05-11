@@ -1,0 +1,25 @@
+{
+	"easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [
+		{"path": "pages/login/login"},
+		{"path": "pages/cart/cart"},
+		{"path": "pages/shop/shop"},
+		{"path": "pages/register/register"},
+		{"path": "pages/index/index"},
+		{"path": "pages/security/security"},
+		{"path": "pages/info/info"},
+		{"path": "pages/user/user"}
+	],
+	"tabBar": {
+		"list": [
+			{"pagePath": "pages/index/index"},
+			{"pagePath": "pages/shop/shop"},
+			{"pagePath": "pages/user/user"}
+		]
+	},
+	"globalStyle": {
+		"navigationStyle": "custom"
+	}
+}
